@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HarvestLink – Fresh Produce, Direct to You</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gd: #1B4332;
+      --gm: #2D6A4F;
+      --gl: #52B788;
+      --gp: #D8F3DC;
+      --cream: #FEFAE0;
+      --cdk: #F0E8CB;
+      --org: #E76F51;
+      --orl: #F4A261;
+      --txt: #1A1A1A;
+      --txl: #5E6E5F;
+      --wh: #FFFFFF;
+      --sh: 0 4px 24px rgba(27,67,50,.10);
+      --shl: 0 8px 40px rgba(27,67,50,.16);
+      --r: 12px;
+      --rl: 20px;
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--cream);color:var(--txt);min-height:100vh;}
+    a{text-decoration:none;}
+
+    /* ─── NAV ─── */
+    nav{background:var(--gd);position:sticky;top:0;z-index:200;box-shadow:0 2px 20px rgba(0,0,0,.22);}
+    .nav-inner{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:68px;}
+    .nav-logo{font-family:'Fraunces',serif;font-size:1.45rem;font-weight:700;color:var(--cream);cursor:pointer;display:flex;align-items:center;gap:6px;border:none;background:none;}
+    .nav-logo span{color:var(--gl);}
+    .nav-links{display:flex;gap:4px;align-items:center;}
+    .nav-link{color:rgba(254,250,224,.78);font-size:.88rem;font-weight:500;padding:8px 13px;border-radius:8px;cursor:pointer;transition:all .18s;background:none;border:none;font-family:'Plus Jakarta Sans',sans-serif;}
+    .nav-link:hover,.nav-link.active{color:var(--cream);background:rgba(255,255,255,.12);}
+    .nav-actions{display:flex;gap:10px;align-items:center;}
+    .nav-icon{background:rgba(255,255,255,.1);border:none;cursor:pointer;color:var(--cream);width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;transition:background .18s;position:relative;}
+    .nav-icon:hover{background:rgba(255,255,255,.2);}
+    .badge{position:absolute;top:-4px;right:-4px;background:var(--org);color:#fff;font-size:.62rem;font-weight:700;width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center;pointer-events:none;}
+    .hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px;}
+    .hamburger span{width:23px;height:2px;background:var(--cream);border-radius:2px;transition:all .3s;}
+    .mob-menu{display:none;position:fixed;top:68px;left:0;right:0;background:var(--gd);padding:12px 20px;z-index:199;flex-direction:column;gap:4px;box-shadow:0 8px 24px rgba(0,0,0,.22);}
+    .mob-menu.open{display:flex;}
+
+    /* ─── PAGES ─── */
+    .page{display:none;}
+    .page.active{display:block;}
+
+    /* ─── HERO ─── */
+    .hero{background:linear-gradient(135deg,var(--gd) 0%,var(--gm) 55%,#40916C 100%);min-height:88vh;display:flex;align-items:center;position:relative;overflow:hidden;padding:80px 24px;}
+    .hero::before{content:'';position:absolute;top:-30%;right:-15%;width:550px;height:550px;background:radial-gradient(circle,rgba(82,183,136,.18) 0%,transparent 68%);border-radius:50%;}
+    .hero::after{content:'🌿';position:absolute;bottom:-30px;right:6%;font-size:280px;opacity:.05;pointer-events:none;}
+    .hero-inner{max-width:1200px;margin:0 auto;width:100%;}
+    .hero-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(82,183,136,.18);border:1px solid rgba(82,183,136,.38);color:var(--gl);padding:6px 16px;border-radius:50px;font-size:.75rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:22px;}
+    .hero h1{font-family:'Fraunces',serif;font-size:clamp(2.4rem,5.5vw,4.8rem);color:var(--cream);line-height:1.1;font-weight:700;margin-bottom:22px;max-width:680px;}
+    .hero h1 em{font-style:italic;color:var(--orl);}
+    .hero p{color:rgba(254,250,224,.72);font-size:1.05rem;line-height:1.75;max-width:540px;margin-bottom:38px;}
+    .hero-btns{display:flex;gap:14px;flex-wrap:wrap;}
+    .btn-p{background:var(--org);color:#fff;padding:13px 30px;border-radius:50px;font-weight:600;font-size:.92rem;border:none;cursor:pointer;transition:all .2s;font-family:'Plus Jakarta Sans',sans-serif;}
+    .btn-p:hover{background:#d4562a;transform:translateY(-2px);box-shadow:0 8px 22px rgba(231,111,81,.38);}
+    .btn-s{background:transparent;color:var(--cream);padding:13px 30px;border-radius:50px;font-weight:600;font-size:.92rem;border:2px solid rgba(254,250,224,.38);cursor:pointer;transition:all .2s;font-family:'Plus Jakarta Sans',sans-serif;}
+    .btn-s:hover{border-color:var(--cream);background:rgba(254,250,224,.1);}
+
+    /* ─── TICKER ─── */
+    .ticker{background:var(--gl);padding:11px 0;overflow:hidden;white-space:nowrap;}
+    .tick-wrap{display:inline-flex;animation:tick 22s linear infinite;}
+    .tick-item{display:inline-flex;align-items:center;gap:7px;font-size:.82rem;font-weight:600;color:var(--gd);padding:0 22px;}
+    @keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+    /* ─── SECTIONS ─── */
+    section{padding:76px 24px;}
+    .con{max-width:1200px;margin:0 auto;}
+    .stag{display:inline-block;background:var(--gp);color:var(--gm);padding:4px 13px;border-radius:50px;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px;}
+    h2.stitle{font-family:'Fraunces',serif;font-size:clamp(1.75rem,2.8vw,2.7rem);font-weight:600;color:var(--gd);margin-bottom:14px;line-height:1.2;}
+    .ssub{color:var(--txl);font-size:.98rem;line-height:1.72;max-width:550px;margin-bottom:44px;}
+
+    /* Season cards */
+    .s-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:22px;}
+    .s-card{background:var(--wh);border-radius:var(--rl);padding:30px 26px;box-shadow:var(--sh);transition:transform .2s,box-shadow .2s;border-top:4px solid var(--gl);}
+    .s-card:hover{transform:translateY(-5px);box-shadow:var(--shl);}
+    .s-icon{font-size:2.3rem;margin-bottom:14px;}
+    .s-card h3{font-family:'Fraunces',serif;font-size:1.15rem;color:var(--gd);margin-bottom:4px;}
+    .s-period{font-size:.78rem;color:var(--org);font-weight:600;margin-bottom:10px;}
+    .s-card p{font-size:.88rem;color:var(--txl);line-height:1.6;}
+
+    /* Impact */
+    .impact-sec{background:var(--gd);}
+    .imp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:30px;text-align:center;}
+    .imp-stat h3{font-family:'Fraunces',serif;font-size:2.9rem;font-weight:700;color:var(--gl);line-height:1;margin-bottom:6px;}
+    .imp-stat p{color:rgba(254,250,224,.68);font-size:.88rem;}
+
+    /* Feature cards */
+    .feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:22px;}
+    .f-card{background:var(--wh);border-radius:var(--rl);padding:30px;box-shadow:var(--sh);transition:transform .2s;}
+    .f-card:hover{transform:translateY(-4px);}
+    .f-num{font-family:'Fraunces',serif;font-size:2.8rem;font-weight:700;color:var(--gp);line-height:1;margin-bottom:8px;}
+    .f-icon{font-size:1.9rem;margin-bottom:10px;}
+    .f-card h3{font-family:'Fraunces',serif;font-size:1.1rem;color:var(--gd);margin-bottom:8px;}
+    .f-card p{font-size:.87rem;color:var(--txl);line-height:1.6;}
+
+    /* ─── SHOP ─── */
+    .shop-hdr{background:var(--gd);padding:58px 24px;text-align:center;}
+    .shop-hdr h1{font-family:'Fraunces',serif;font-size:2.8rem;color:var(--cream);margin-bottom:10px;}
+    .shop-hdr p{color:rgba(254,250,224,.68);font-size:.97rem;margin-bottom:28px;}
+    .srch{max-width:480px;margin:0 auto;display:flex;background:#fff;border-radius:50px;overflow:hidden;box-shadow:0 4px 18px rgba(0,0,0,.14);}
+    .srch input{flex:1;padding:13px 22px;border:none;outline:none;font-size:.93rem;font-family:'Plus Jakarta Sans',sans-serif;}
+    .srch button{background:var(--org);border:none;padding:13px 22px;cursor:pointer;color:#fff;font-size:1.05rem;transition:background .2s;}
+    .srch button:hover{background:#d4562a;}
+    .filters{padding:20px 24px;max-width:1200px;margin:0 auto;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+    .flbl{font-size:.82rem;font-weight:600;color:var(--txl);}
+    .fbtn{padding:7px 16px;border-radius:50px;border:2px solid var(--cdk);background:#fff;font-size:.82rem;font-weight:500;cursor:pointer;transition:all .18s;font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);}
+    .fbtn:hover,.fbtn.active{background:var(--gd);border-color:var(--gd);color:#fff;}
+    .prod-grid{max-width:1200px;margin:0 auto;padding:0 24px 76px;display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:22px;}
+    .p-card{background:#fff;border-radius:var(--rl);overflow:hidden;box-shadow:var(--sh);transition:all .2s;position:relative;}
+    .p-card:hover{transform:translateY(-6px);box-shadow:var(--shl);}
+    .p-img{height:195px;display:flex;align-items:center;justify-content:center;font-size:4.5rem;position:relative;overflow:hidden;}
+    .p-bdg{position:absolute;top:11px;left:11px;background:var(--org);color:#fff;font-size:.66rem;font-weight:700;padding:3px 9px;border-radius:50px;text-transform:uppercase;letter-spacing:.05em;}
+    .wbtn{position:absolute;top:11px;right:11px;width:35px;height:35px;border-radius:50%;background:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.05rem;box-shadow:0 2px 8px rgba(0,0,0,.14);transition:transform .18s;}
+    .wbtn:hover{transform:scale(1.2);}
+    .wbtn.on{background:#ffe4e4;}
+    .p-info{padding:18px;}
+    .p-cat{font-size:.72rem;font-weight:600;color:var(--gm);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px;}
+    .p-name{font-family:'Fraunces',serif;font-size:1.1rem;font-weight:600;color:var(--gd);margin-bottom:3px;}
+    .p-unit{font-size:.78rem;color:var(--txl);margin-bottom:7px;}
+    .p-desc{font-size:.83rem;color:var(--txl);line-height:1.5;margin-bottom:14px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+    .p-foot{display:flex;align-items:center;justify-content:space-between;}
+    .p-price{font-family:'Fraunces',serif;font-size:1.35rem;font-weight:700;color:var(--gd);}
+    .p-price span{font-size:.77rem;font-weight:400;color:var(--txl);font-family:'Plus Jakarta Sans',sans-serif;}
+    .abtn{background:var(--gd);color:#fff;border:none;padding:9px 16px;border-radius:50px;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .18s;font-family:'Plus Jakarta Sans',sans-serif;white-space:nowrap;}
+    .abtn:hover{background:var(--gm);transform:scale(1.04);}
+    .abtn.added{background:var(--gl);}
+    .no-res{text-align:center;padding:60px;color:var(--txl);font-size:.97rem;grid-column:1/-1;}
+    /* bg palettes */
+    .bg-o{background:linear-gradient(135deg,#FFF3E0,#FFE0B2);}
+    .bg-g{background:linear-gradient(135deg,#E8F5E9,#C8E6C9);}
+    .bg-r{background:linear-gradient(135deg,#FCE4EC,#F8BBD0);}
+    .bg-v{background:linear-gradient(135deg,#EDE7F6,#D1C4E9);}
+    .bg-y{background:linear-gradient(135deg,#FFFDE7,#FFF9C4);}
+    .bg-c{background:linear-gradient(135deg,#E3F2FD,#BBDEFB);}
+
+    /* ─── PAGE HEADER ─── */
+    .phdr{background:var(--gd);padding:48px 24px;text-align:center;}
+    .phdr h1{font-family:'Fraunces',serif;font-size:2.4rem;color:var(--cream);}
+
+    /* ─── CART ─── */
+    .cart-lay{max-width:1100px;margin:36px auto;padding:0 24px 60px;display:grid;grid-template-columns:1fr 345px;gap:28px;align-items:start;}
+    .cart-box{background:#fff;border-radius:var(--rl);box-shadow:var(--sh);overflow:hidden;}
+    .c-item{display:flex;align-items:center;gap:14px;padding:18px 22px;border-bottom:1px solid var(--cdk);}
+    .c-item:last-child{border-bottom:none;}
+    .c-emo{font-size:2.4rem;width:56px;height:56px;background:var(--cream);border-radius:var(--r);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .c-info{flex:1;}
+    .c-name{font-family:'Fraunces',serif;font-size:.97rem;color:var(--gd);margin-bottom:2px;}
+    .c-unit{font-size:.77rem;color:var(--txl);}
+    .c-qty{display:flex;align-items:center;gap:9px;}
+    .qbtn{width:29px;height:29px;border-radius:50%;border:2px solid var(--cdk);background:#fff;cursor:pointer;font-size:.95rem;display:flex;align-items:center;justify-content:center;font-weight:700;transition:all .18s;}
+    .qbtn:hover{background:var(--gd);border-color:var(--gd);color:#fff;}
+    .qnum{font-weight:600;font-size:.93rem;min-width:22px;text-align:center;}
+    .c-price{font-family:'Fraunces',serif;font-size:1.05rem;font-weight:600;color:var(--gd);min-width:72px;text-align:right;}
+    .rbtn{background:none;border:none;cursor:pointer;color:#ccc;font-size:1.1rem;transition:color .18s;padding:4px;}
+    .rbtn:hover{color:var(--org);}
+    .sum-box{background:#fff;border-radius:var(--rl);box-shadow:var(--sh);padding:26px;position:sticky;top:86px;}
+    .sum-box h3{font-family:'Fraunces',serif;font-size:1.25rem;color:var(--gd);margin-bottom:18px;padding-bottom:14px;border-bottom:2px solid var(--cdk);}
+    .s-row{display:flex;justify-content:space-between;margin-bottom:11px;font-size:.88rem;color:var(--txl);}
+    .s-row.tot{font-family:'Fraunces',serif;font-size:1.15rem;color:var(--gd);font-weight:700;padding-top:14px;border-top:2px solid var(--cdk);margin-top:6px;}
+    .s-row.disc{color:var(--gl);}
+    .promo-row{display:flex;gap:7px;margin:18px 0;}
+    .promo-row input{flex:1;padding:9px 13px;border:2px solid var(--cdk);border-radius:8px;font-size:.88rem;outline:none;font-family:'Plus Jakarta Sans',sans-serif;transition:border-color .2s;}
+    .promo-row input:focus{border-color:var(--gl);}
+    .promo-row button{padding:9px 14px;background:var(--gd);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600;font-size:.82rem;font-family:'Plus Jakarta Sans',sans-serif;transition:background .2s;}
+    .promo-row button:hover{background:var(--gm);}
+    .pmsg{font-size:.8rem;margin-bottom:6px;font-weight:600;}
+    .pmsg.ok{color:var(--gl);}
+    .pmsg.err{color:var(--org);}
+    .co-btn{width:100%;padding:15px;background:var(--org);color:#fff;border:none;border-radius:50px;font-size:.97rem;font-weight:700;cursor:pointer;transition:all .2s;font-family:'Plus Jakarta Sans',sans-serif;margin-top:14px;}
+    .co-btn:hover{background:#d4562a;transform:translateY(-2px);box-shadow:0 6px 18px rgba(231,111,81,.38);}
+    .empty-st{text-align:center;padding:76px 24px;}
+    .empty-st .ei{font-size:3.8rem;margin-bottom:14px;}
+    .empty-st h3{font-family:'Fraunces',serif;font-size:1.45rem;color:var(--gd);margin-bottom:8px;}
+    .empty-st p{color:var(--txl);margin-bottom:22px;}
+
+    /* ─── WISHLIST ─── */
+    .wish-grid{max-width:1200px;margin:36px auto;padding:0 24px 76px;display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:22px;}
+
+    /* ─── CHECKOUT ─── */
+    .co-lay{max-width:980px;margin:36px auto;padding:0 24px 76px;display:grid;grid-template-columns:1fr 305px;gap:28px;align-items:start;}
+    .co-box{background:#fff;border-radius:var(--rl);box-shadow:var(--sh);padding:30px;}
+    .co-box h3{font-family:'Fraunces',serif;font-size:1.25rem;color:var(--gd);margin-bottom:22px;display:flex;align-items:center;gap:9px;}
+    .step-n{width:26px;height:26px;background:var(--gd);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.77rem;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;flex-shrink:0;}
+    .f-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+    .fg{margin-bottom:14px;}
+    .fg label{display:block;font-size:.78rem;font-weight:700;color:var(--txt);margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em;}
+    .fg input,.fg select{width:100%;padding:11px 14px;border:2px solid var(--cdk);border-radius:9px;font-size:.92rem;outline:none;font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);background:#fff;transition:border-color .2s;}
+    .fg input:focus,.fg select:focus{border-color:var(--gl);}
+    .pay-methods{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:22px;}
+    .pay-m{border:2px solid var(--cdk);border-radius:11px;padding:14px 10px;text-align:center;cursor:pointer;transition:all .18s;user-select:none;}
+    .pay-m:hover{border-color:var(--gl);}
+    .pay-m.sel{border-color:var(--gd);background:var(--gp);}
+    .pay-m .pico{font-size:1.7rem;margin-bottom:5px;}
+    .pay-m .plbl{font-size:.74rem;font-weight:600;color:var(--txt);}
+    .cf{display:none;}
+    .cf.vis{display:block;}
+    .eftf{display:none;}
+    .eftf.vis{display:block;}
+    .demo-note{background:#FFF8E1;border:1px solid #FFD54F;border-radius:9px;padding:11px 14px;font-size:.8rem;color:#7B5800;margin-bottom:18px;display:flex;align-items:flex-start;gap:8px;line-height:1.55;}
+    .ord-sum{background:#fff;border-radius:var(--rl);box-shadow:var(--sh);padding:26px;position:sticky;top:86px;}
+    .ord-sum h3{font-family:'Fraunces',serif;font-size:1.15rem;color:var(--gd);margin-bottom:18px;padding-bottom:14px;border-bottom:2px solid var(--cdk);}
+    .oi{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;font-size:.86rem;}
+    .oi-n{color:var(--txt);}
+    .oi-p{font-weight:600;color:var(--gd);}
+    /* Confirmation */
+    .conf-wrap{min-height:80vh;display:flex;align-items:center;justify-content:center;padding:76px 24px;background:linear-gradient(135deg,var(--gp) 0%,var(--cream) 100%);}
+    .conf-box{background:#fff;border-radius:var(--rl);box-shadow:var(--shl);padding:56px 44px;text-align:center;max-width:540px;width:100%;}
+    .conf-ico{width:76px;height:76px;background:var(--gp);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.4rem;margin:0 auto 22px;}
+    .conf-box h2{font-family:'Fraunces',serif;font-size:1.95rem;color:var(--gd);margin-bottom:11px;}
+    .conf-box p{color:var(--txl);line-height:1.7;margin-bottom:7px;}
+    .ord-num{background:var(--gp);border-radius:9px;padding:14px 22px;margin:22px 0;font-family:'Fraunces',serif;font-size:1.25rem;color:var(--gd);font-weight:600;}
+    /* About */
+    .ab-hero{background:linear-gradient(135deg,var(--gd),#2D6A4F);padding:76px 24px;text-align:center;}
+    .ab-hero h1{font-family:'Fraunces',serif;font-size:clamp(1.9rem,3.8vw,3.3rem);color:var(--cream);margin-bottom:14px;}
+    .ab-hero p{color:rgba(254,250,224,.72);max-width:580px;margin:0 auto;line-height:1.75;}
+    .mis-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:22px;}
+    .mis-card{background:#fff;border-radius:var(--rl);padding:30px;box-shadow:var(--sh);}
+    .mis-card .mico{font-size:1.9rem;margin-bottom:14px;}
+    .mis-card h3{font-family:'Fraunces',serif;font-size:1.15rem;color:var(--gd);margin-bottom:10px;}
+    .mis-card p{font-size:.87rem;color:var(--txl);line-height:1.6;}
+    /* Blog */
+    .blog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:26px;max-width:1200px;margin:36px auto;padding:0 24px 76px;}
+    .bl-card{background:#fff;border-radius:var(--rl);box-shadow:var(--sh);overflow:hidden;transition:transform .2s,box-shadow .2s;}
+    .bl-card:hover{transform:translateY(-4px);box-shadow:var(--shl);}
+    .bl-img{height:195px;display:flex;align-items:center;justify-content:center;font-size:5rem;}
+    .bl-body{padding:22px;}
+    .bl-tag{display:inline-block;background:var(--gp);color:var(--gm);padding:3px 11px;border-radius:50px;font-size:.72rem;font-weight:600;margin-bottom:10px;text-transform:uppercase;}
+    .bl-card h3{font-family:'Fraunces',serif;font-size:1.1rem;color:var(--gd);margin-bottom:9px;line-height:1.3;}
+    .bl-card p{font-size:.85rem;color:var(--txl);line-height:1.6;margin-bottom:14px;}
+    .bl-meta{font-size:.76rem;color:var(--txl);display:flex;gap:14px;}
+    /* Footer */
+    footer{background:var(--gd);padding:56px 24px 28px;color:rgba(254,250,224,.72);}
+    .ft-in{max-width:1200px;margin:0 auto;}
+    .ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:36px;margin-bottom:44px;}
+    .ft-brand .ft-logo{font-family:'Fraunces',serif;font-size:1.35rem;font-weight:700;color:var(--cream);margin-bottom:11px;}
+    .ft-brand p{font-size:.86rem;line-height:1.7;margin-bottom:18px;max-width:270px;}
+    footer h4{font-family:'Fraunces',serif;color:var(--cream);font-size:.97rem;margin-bottom:14px;}
+    footer ul{list-style:none;display:flex;flex-direction:column;gap:9px;}
+    footer ul li{font-size:.86rem;cursor:pointer;transition:color .18s;}
+    footer ul li:hover{color:var(--gl);}
+    .ft-bot{padding-top:22px;border-top:1px solid rgba(254,250,224,.14);display:flex;justify-content:space-between;align-items:center;font-size:.8rem;flex-wrap:wrap;gap:10px;}
+    .soc-links{display:flex;gap:10px;}
+    .soc-link{width:34px;height:34px;background:rgba(255,255,255,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem;cursor:pointer;transition:background .18s;color:var(--cream);}
+    .soc-link:hover{background:var(--gl);}
+    /* Toast */
+    .toast{position:fixed;bottom:22px;right:22px;background:var(--gd);color:#fff;padding:13px 18px;border-radius:11px;font-size:.88rem;font-weight:500;box-shadow:0 8px 30px rgba(0,0,0,.2);z-index:9999;display:flex;align-items:center;gap:9px;transform:translateY(100px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;}
+    .toast.show{transform:translateY(0);opacity:1;}
+    /* Animations */
+    @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+    .fade{animation:fadeUp .45s ease both;}
+    /* Responsive */
+    @media(max-width:900px){.ft-grid{grid-template-columns:1fr 1fr;}.cart-lay{grid-template-columns:1fr;}.co-lay{grid-template-columns:1fr;}.nav-links{display:none;}.hamburger{display:flex;}}
+    @media(max-width:500px){.ft-grid{grid-template-columns:1fr;}.pay-methods{grid-template-columns:1fr;}.f-row{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <button class="nav-logo" onclick="go('home')">🌱 Harvest<span>Link</span></button>
+    <div class="nav-links">
+      <button class="nav-link active" onclick="go('home')">Home</button>
+      <button class="nav-link" onclick="go('about')">About Us</button>
+      <button class="nav-link" onclick="go('shop')">Shop</button>
+      <button class="nav-link" onclick="go('blog')">Blog</button>
+    </div>
+    <div class="nav-actions">
+      <button class="nav-icon" onclick="go('wishlist')" title="Wishlist">♡<span class="badge" id="wb" style="display:none">0</span></button>
+      <button class="nav-icon" onclick="go('cart')" title="Cart">🛒<span class="badge" id="cb" style="display:none">0</span></button>
+      <button class="hamburger" onclick="toggleMob()"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<div class="mob-menu" id="mob">
+  <button class="nav-link" onclick="go('home');toggleMob()">🏠 Home</button>
+  <button class="nav-link" onclick="go('about');toggleMob()">ℹ️ About Us</button>
+  <button class="nav-link" onclick="go('shop');toggleMob()">🛍️ Shop</button>
+  <button class="nav-link" onclick="go('blog');toggleMob()">📰 Blog</button>
+  <button class="nav-link" onclick="go('wishlist');toggleMob()">♡ Wishlist</button>
+  <button class="nav-link" onclick="go('cart');toggleMob()">🛒 Cart</button>
+</div>
+<div class="toast" id="toast"></div>
+
+<!-- ═══════════════════ HOME ═══════════════════ -->
+<div class="page active" id="page-home">
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-tag">🌿 South African Farm Network</div>
+      <h1>Fresh Produce,<br><em>Direct</em> to You</h1>
+      <p>HarvestLink bridges the gap between South African small-scale farmers and community kitchens. We ensure food security by delivering fresh seasonal yields directly to those who need them most.</p>
+      <div class="hero-btns">
+        <button class="btn-p" onclick="go('shop')">🛒 Shop Now</button>
+        <button class="btn-s" onclick="go('about')">Our Story →</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="ticker"><div class="tick-wrap" id="ticker"></div></div>
+
+  <!-- SEASONAL CALENDAR -->
+  <section style="background:var(--cream)">
+    <div class="con">
+      <div class="stag">🗓️ Seasonal Guide</div>
+      <h2 class="stitle">Plan Your Menus with the Seasons</h2>
+      <p class="ssub">Stay informed about South Africa's agricultural availability to ensure the freshest, most cost-effective supply for your community kitchen.</p>
+      <div class="s-grid">
+        <div class="s-card" style="border-top-color:#FFB300">
+          <div class="s-icon">☀️</div><h3>Summer Harvest</h3>
+          <div class="s-period">December — February</div>
+          <p>Mangoes, Watermelons, Peaches, Corn, Tomatoes, and Sweet Peppers at their peak sweetness and abundance.</p>
+        </div>
+        <div class="s-card" style="border-top-color:#E76F51">
+          <div class="s-icon">🍂</div><h3>Autumn Harvest</h3>
+          <div class="s-period">March — May</div>
+          <p>Apples, Pears, Avocados, Grapes, and Butternut Squash provide nutrient-dense options for hearty meals.</p>
+        </div>
+        <div class="s-card" style="border-top-color:#52B788">
+          <div class="s-icon">❄️</div><h3>Winter Harvest</h3>
+          <div class="s-period">June — August</div>
+          <p>Oranges, Lemons, Broccoli, Spinach, and Kale thrive, ensuring essential vitamins during the colder months.</p>
+        </div>
+        <div class="s-card" style="border-top-color:#74C69D">
+          <div class="s-icon">🌸</div><h3>Spring Harvest</h3>
+          <div class="s-period">September — November</div>
+          <p>Strawberries, Young Carrots, Peas, Asparagus, and Beetroot signal the return of warmer growing conditions.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- IMPACT -->
+  <section class="impact-sec">
+    <div class="con">
+      <div class="imp-grid">
+        <div class="imp-stat"><h3>48+</h3><p>Partner Farmers</p></div>
+        <div class="imp-stat"><h3>120+</h3><p>Community Kitchens Served</p></div>
+        <div class="imp-stat"><h3>15K+</h3><p>Meals Supported Monthly</p></div>
+        <div class="imp-stat"><h3>Zero</h3><p>Produce Wasted</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section style="background:var(--cream)">
+    <div class="con">
+      <div class="stag">✨ Our Values</div>
+      <h2 class="stitle">Connecting Surplus to<br>Community Resilience</h2>
+      <p class="ssub">We believe food security begins at the source. HarvestLink transforms how small-scale farmers connect with the marketplace.</p>
+      <div class="feat-grid">
+        <div class="f-card"><div class="f-num">01</div><div class="f-icon">🌱</div><h3>Sustainably Grown</h3><p>Supporting small-scale South African farmers with fair marketplace access and economic dignity.</p></div>
+        <div class="f-card"><div class="f-num">02</div><div class="f-icon">🍃</div><h3>Seasonal Bounty</h3><p>Fresh produce delivered at its nutritional peak, celebrating the rhythms of local agriculture.</p></div>
+        <div class="f-card"><div class="f-num">03</div><div class="f-icon">🏘️</div><h3>Community Nourishment</h3><p>Feeding vulnerable populations through a network of local kitchens, schools, and feeding programs.</p></div>
+        <div class="f-card"><div class="f-num">04</div><div class="f-icon">🤝</div><h3>Impactful Partnerships</h3><p>Bridging the gap between the soil and the school plate through meaningful institutional relationships.</p></div>
+        <div class="f-card"><div class="f-num">05</div><div class="f-icon">🥇</div><h3>Local Excellence</h3><p>Professional-grade, quality-assured produce for institutions that feed South Africa's future.</p></div>
+        <div class="f-card"><div class="f-num">06</div><div class="f-icon">🔗</div><h3>Direct Connections</h3><p>Empowering growers through transparent, direct marketplace access — no middlemen, fair prices.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BAND -->
+  <section style="background:var(--org);padding:56px 24px;text-align:center">
+    <div class="con">
+      <h2 style="font-family:'Fraunces',serif;font-size:2.1rem;color:#fff;margin-bottom:11px">Ready to Join the Network?</h2>
+      <p style="color:rgba(255,255,255,.84);margin-bottom:30px;font-size:.97rem">Whether you're a farmer with fresh surplus or a kitchen serving your community, HarvestLink is for you.</p>
+      <button class="btn-p" style="background:#fff;color:var(--org);margin-right:11px" onclick="go('shop')">🛒 Browse Produce</button>
+      <button class="btn-s" style="color:#fff;border-color:rgba(255,255,255,.48)" onclick="go('about')">Our Story</button>
+    </div>
+  </section>
+</div>
+
+<!-- ═══════════════════ ABOUT ═══════════════════ -->
+<div class="page" id="page-about">
+  <div class="ab-hero">
+    <h1>Bridging Field &amp; Community Kitchen</h1>
+    <p>We founded HarvestLink to solve a critical inequality in the South African food system. Fresh produce should reach every community kitchen — not go to waste on farm.</p>
+  </div>
+  <section style="background:var(--cream)">
+    <div class="con">
+      <div class="stag">🌍 Our Mission</div>
+      <h2 class="stitle">Why HarvestLink Exists</h2>
+      <p class="ssub">While local farmers produce nutrient-rich harvests, community kitchens and schools often struggle to find consistent, affordable supplies. We act as the vital connector.</p>
+      <div class="mis-grid">
+        <div class="mis-card"><div class="mico">👨‍🌾</div><h3>Empowering Local Farmers</h3><p>We bridge the infrastructure gap for local growers, providing direct access to wholesale institutional markets and ensuring fair economic returns for their harvest.</p></div>
+        <div class="mis-card"><div class="mico">🍽️</div><h3>Supporting Food Security</h3><p>Our marketplace prioritizes delivery to schools and community kitchens, ensuring fresh, local produce reaches the vulnerable populations that need it most.</p></div>
+        <div class="mis-card"><div class="mico">📅</div><h3>Fostering Seasonal Awareness</h3><p>We educate our community on seasonal availability, helping organizations plan nutritional menus that celebrate local harvest while reducing our carbon footprint.</p></div>
+      </div>
+    </div>
+  </section>
+  <section class="impact-sec">
+    <div class="con" style="text-align:center">
+      <div class="stag" style="background:rgba(82,183,136,.2);color:var(--gl)">📍 Based in Cape Town</div>
+      <h2 style="font-family:'Fraunces',serif;font-size:2.1rem;color:var(--cream);margin:14px 0">HarvestLink South Africa</h2>
+      <p style="color:rgba(254,250,224,.7);max-width:480px;margin:0 auto 36px;line-height:1.75">Cape Town Hub, Western Cape<br>hello@harvestlink.org.za &nbsp;|&nbsp; +27 21 555 4321</p>
+      <button class="btn-p" onclick="go('shop')">🛒 Start Shopping</button>
+    </div>
+  </section>
+</div>
+
+<!-- ═══════════════════ SHOP ═══════════════════ -->
+<div class="page" id="page-shop">
+  <div class="shop-hdr">
+    <h1>🌿 Fresh Produce</h1>
+    <p>Seasonal, locally sourced produce from small-scale South African farmers.</p>
+    <div class="srch">
+      <input type="text" id="srch-inp" placeholder="Search produce (e.g. carrots, oranges…)" oninput="filterProds()">
+      <button onclick="filterProds()">🔍</button>
+    </div>
+  </div>
+  <div class="filters">
+    <span class="flbl">Filter by:</span>
+    <button class="fbtn active" onclick="setFilter('all',this)">All Produce</button>
+    <button class="fbtn" onclick="setFilter('roots',this)">🥕 Root Veg</button>
+    <button class="fbtn" onclick="setFilter('leafy',this)">🥬 Leafy Greens</button>
+    <button class="fbtn" onclick="setFilter('fruit',this)">🍎 Fruit</button>
+    <button class="fbtn" onclick="setFilter('citrus',this)">🍊 Citrus</button>
+    <button class="fbtn" onclick="setFilter('squash',this)">🎃 Squash</button>
+  </div>
+  <div class="prod-grid" id="prod-grid"></div>
+</div>
+
+<!-- ═══════════════════ WISHLIST ═══════════════════ -->
+<div class="page" id="page-wishlist">
+  <div class="phdr"><h1>♡ My Wishlist</h1></div>
+  <div id="wish-con"></div>
+</div>
+
+<!-- ═══════════════════ CART ═══════════════════ -->
+<div class="page" id="page-cart">
+  <div class="phdr"><h1>🛒 Your Basket</h1></div>
+  <div id="cart-con"></div>
+</div>
+
+<!-- ═══════════════════ CHECKOUT ═══════════════════ -->
+<div class="page" id="page-checkout">
+  <div class="phdr"><h1>🔐 Secure Checkout</h1></div>
+  <div class="co-lay">
+    <!-- FORMS -->
+    <div style="display:flex;flex-direction:column;gap:22px">
+      <!-- Delivery -->
+      <div class="co-box">
+        <h3><span class="step-n">1</span> Delivery Details</h3>
+        <div class="f-row">
+          <div class="fg"><label>First Name</label><input type="text" placeholder="e.g. Thabo" id="co-fn"></div>
+          <div class="fg"><label>Last Name</label><input type="text" placeholder="e.g. Nkosi" id="co-ln"></div>
+        </div>
+        <div class="fg"><label>Email Address</label><input type="email" placeholder="you@example.com" id="co-em"></div>
+        <div class="fg"><label>Phone Number</label><input type="tel" placeholder="+27 XX XXX XXXX" id="co-ph"></div>
+        <div class="fg"><label>Delivery Address</label><input type="text" placeholder="Street address" id="co-ad"></div>
+        <div class="f-row">
+          <div class="fg"><label>City</label><input type="text" placeholder="Cape Town" id="co-ci"></div>
+          <div class="fg"><label>Province</label>
+            <select id="co-pv">
+              <option value="">Select Province</option>
+              <option>Western Cape</option><option>Gauteng</option><option>KwaZulu-Natal</option>
+              <option>Eastern Cape</option><option>Limpopo</option><option>Mpumalanga</option>
+              <option>North West</option><option>Free State</option><option>Northern Cape</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <!-- Payment -->
+      <div class="co-box">
+        <h3><span class="step-n">2</span> Payment Method</h3>
+        <div class="demo-note">⚠️ <div><strong>Demo Mode:</strong> No real payment is processed. You can safely enter any dummy details — your real information is never stored or charged.</div></div>
+        <div class="pay-methods">
+          <div class="pay-m sel" onclick="selPay('card',this)"><div class="pico">💳</div><div class="plbl">Credit / Debit Card</div></div>
+          <div class="pay-m" onclick="selPay('eft',this)"><div class="pico">🏦</div><div class="plbl">EFT / Bank Transfer</div></div>
+          <div class="pay-m" onclick="selPay('wallet',this)"><div class="pico">📱</div><div class="plbl">Digital Wallet</div></div>
+        </div>
+        <!-- Card fields -->
+        <div class="cf vis" id="cf">
+          <div class="fg"><label>Cardholder Name</label><input type="text" placeholder="Name as on card" id="co-cn"></div>
+          <div class="fg"><label>Card Number</label><input type="text" placeholder="1234 5678 9012 3456" maxlength="19" id="co-cnum" oninput="fmtCard(this)"></div>
+          <div class="f-row">
+            <div class="fg"><label>Expiry Date</label><input type="text" placeholder="MM / YY" maxlength="7" id="co-exp" oninput="fmtExp(this)"></div>
+            <div class="fg"><label>CVV</label><input type="text" placeholder="123" maxlength="4" id="co-cvv"></div>
+          </div>
+        </div>
+        <!-- EFT fields -->
+        <div class="eftf" id="eftf">
+          <div style="background:var(--cream);border-radius:9px;padding:18px;margin-bottom:14px">
+            <p style="font-size:.86rem;color:var(--txl);line-height:1.8">
+              <strong style="color:var(--gd)">Bank Transfer Details (Demo):</strong><br>
+              Bank: First National Bank (FNB)<br>
+              Account Name: HarvestLink SA (Pty) Ltd<br>
+              Account Number: <strong>62 4827 3910</strong><br>
+              Branch Code: 250 655<br>
+              Reference: Your order number (shown after checkout)
+            </p>
+          </div>
+          <div class="fg"><label>Your Bank Name</label><input type="text" placeholder="e.g. Standard Bank, ABSA…"></div>
+        </div>
+        <!-- Wallet fields -->
+        <div id="walf" style="display:none">
+          <div class="fg"><label>Mobile Number</label><input type="text" placeholder="+27 XX XXX XXXX"></div>
+          <div class="fg"><label>Wallet Provider</label>
+            <select><option>SnapScan</option><option>Zapper</option><option>MTN Mobile Money</option><option>PayShap</option></select>
+          </div>
+        </div>
+      </div>
+      <button class="co-btn" onclick="placeOrder()">✅ Place Order (Demo)</button>
+    </div>
+    <!-- ORDER SUMMARY -->
+    <div class="ord-sum">
+      <h3>Order Summary</h3>
+      <div id="co-items"></div>
+      <div id="co-tots"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ CONFIRMATION ═══════════════════ -->
+<div class="page" id="page-conf">
+  <div class="conf-wrap">
+    <div class="conf-box">
+      <div class="conf-ico">✅</div>
+      <h2>Order Placed!</h2>
+      <p>Thank you for your demo order. In a real scenario, your fresh produce would now be on its way!</p>
+      <div class="ord-num" id="ord-num">Order #HL-00000</div>
+      <p style="font-size:.83rem;color:var(--txl)">A confirmation email would be sent to your address.</p>
+      <div style="margin-top:30px;display:flex;gap:11px;justify-content:center;flex-wrap:wrap">
+        <button class="btn-p" onclick="go('shop')">🛒 Continue Shopping</button>
+        <button class="btn-s" style="color:var(--gd);border-color:var(--gd)" onclick="go('home')">Go Home</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ BLOG ═══════════════════ -->
+<div class="page" id="page-blog">
+  <div class="phdr"><h1>📰 HarvestLink Blog</h1></div>
+  <div class="blog-grid">
+    <div class="bl-card"><div class="bl-img bg-g">🥬</div><div class="bl-body"><span class="bl-tag">Seasonal Guide</span><h3>Why Seasonal Produce Matters for Community Kitchens</h3><p>Seasonal ingredients aren't just fresher — they're more affordable, nutritionally dense, and support local farmers at critical harvest periods.</p><div class="bl-meta"><span>👤 HarvestLink Team</span><span>📅 15 Apr 2026</span></div></div></div>
+    <div class="bl-card"><div class="bl-img bg-o">🧑‍🌾</div><div class="bl-body"><span class="bl-tag">Farmer Stories</span><h3>Meet Sipho: Small-Scale Farmer from the Overberg</h3><p>How one Western Cape farmer transformed surplus winter broccoli into steady income through the HarvestLink network.</p><div class="bl-meta"><span>👤 Editorial</span><span>📅 3 Mar 2026</span></div></div></div>
+    <div class="bl-card"><div class="bl-img bg-y">🍊</div><div class="bl-body"><span class="bl-tag">Nutrition</span><h3>Winter Citrus: The Vitamin C Powerhouse for Cold-Season Menus</h3><p>A deep dive into the nutritional benefits of winter citrus varieties and how they can strengthen community kitchen menus from June to August.</p><div class="bl-meta"><span>👤 Nutrition Desk</span><span>📅 10 Jun 2025</span></div></div></div>
+    <div class="bl-card"><div class="bl-img bg-v">🍆</div><div class="bl-body"><span class="bl-tag">Food Security</span><h3>How Local Food Networks Fight Hunger in South Africa</h3><p>An in-depth look at how hyper-local food networks are proving more resilient than traditional supply chains during economic disruptions.</p><div class="bl-meta"><span>👤 Research</span><span>📅 22 Jan 2026</span></div></div></div>
+    <div class="bl-card"><div class="bl-img bg-r">🍓</div><div class="bl-body"><span class="bl-tag">Recipes</span><h3>5 Budget-Friendly Recipes Using Spring Produce</h3><p>From strawberry oat breakfasts to beetroot stews — simple, nutritious recipes perfect for feeding large groups on a budget.</p><div class="bl-meta"><span>👤 Chef Nomvula</span><span>📅 5 Oct 2025</span></div></div></div>
+    <div class="bl-card"><div class="bl-img bg-g">🥑</div><div class="bl-body"><span class="bl-tag">Partnerships</span><h3>HarvestLink Partners with 12 New Schools in Gauteng</h3><p>Expanding our reach beyond the Western Cape, we're proud to announce fresh produce deliveries to 12 new school feeding programs in Gauteng.</p><div class="bl-meta"><span>👤 Operations</span><span>📅 18 Aug 2025</span></div></div></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer id="ft">
+  <div class="ft-in">
+    <div class="ft-grid">
+      <div class="ft-brand">
+        <div class="ft-logo">🌱 HarvestLink</div>
+        <p>Building a resilient food system across South Africa, empowering small-scale farmers by bridging the gap to institutions that feed our most vulnerable populations.</p>
+        <div class="soc-links">
+          <span class="soc-link">f</span>
+          <span class="soc-link">📷</span>
+          <span class="soc-link">in</span>
+          <span class="soc-link">𝕏</span>
+        </div>
+      </div>
+      <div><h4>Quick Links</h4><ul>
+        <li onclick="go('home')">Home</li><li onclick="go('about')">About Us</li>
+        <li onclick="go('shop')">Shop</li><li onclick="go('blog')">Blog</li>
+      </ul></div>
+      <div><h4>Produce</h4><ul>
+        <li onclick="go('shop')">All Products</li>
+        <li onclick="go('shop')">Root Vegetables</li>
+        <li onclick="go('shop')">Leafy Greens</li>
+        <li onclick="go('shop')">Seasonal Fruit</li>
+      </ul></div>
+      <div><h4>Contact Us</h4><ul>
+        <li>📍 Cape Town Hub, SA</li>
+        <li>✉️ hello@harvestlink.org.za</li>
+        <li>📞 +27 21 555 4321</li>
+      </ul></div>
+    </div>
+    <div class="ft-bot">
+      <span>© 2026 HarvestLink. Dedicated to Food Security.</span>
+      <span>Made with 💚 in Cape Town</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ═══════ PRODUCTS DATA ═══════
+const PRODS = [
+  {id:1,name:"Sweet Potatoes",price:45,unit:"per kg",cat:"roots",emo:"🍠",bg:"bg-o",desc:"Farm-fresh sweet potatoes rich in beta-carotene. Sourced from small-scale farmers in the Western Cape.",badge:"Best Seller"},
+  {id:2,name:"Green Cabbage",price:25,unit:"per head",cat:"leafy",emo:"🥬",bg:"bg-g",desc:"Crisp, locally-grown cabbage perfect for community kitchen meals and bulk soups."},
+  {id:3,name:"Navel Oranges",price:35,unit:"per bag (5kg)",cat:"citrus",emo:"🍊",bg:"bg-y",desc:"Juicy winter oranges packed with Vitamin C. Sourced directly from Citrusdal farms.",badge:"In Season"},
+  {id:4,name:"Baby Spinach",price:20,unit:"per bunch",cat:"leafy",emo:"🌿",bg:"bg-g",desc:"Tender baby spinach leaves, nutrient-dense and versatile for any institutional kitchen."},
+  {id:5,name:"Carrots",price:30,unit:"per kg",cat:"roots",emo:"🥕",bg:"bg-o",desc:"Crunchy, sweet carrots grown without pesticides. Ideal for soups, stews, and raw snacks."},
+  {id:6,name:"Beetroot",price:28,unit:"per bunch",cat:"roots",emo:"🫐",bg:"bg-v",desc:"Earthy, vibrant beetroot from Cape Winelands farms. Rich in iron and folate.",badge:"Organic"},
+  {id:7,name:"Alphonso Mangoes",price:55,unit:"per bag (3kg)",cat:"fruit",emo:"🥭",bg:"bg-y",desc:"Sweet, golden summer mangoes at peak ripeness. Straight from Limpopo orchards.",badge:"Seasonal"},
+  {id:8,name:"Butternut Squash",price:40,unit:"per unit",cat:"squash",emo:"🎃",bg:"bg-o",desc:"Large, nutrient-rich butternut squash. Perfect for hearty autumn soups and meals."},
+  {id:9,name:"Tenderstem Broccoli",price:38,unit:"per head",cat:"leafy",emo:"🥦",bg:"bg-g",desc:"Crisp winter broccoli packed with vitamins K and C. Grown in the Overberg region."},
+  {id:10,name:"Strawberries",price:65,unit:"per punnet (500g)",cat:"fruit",emo:"🍓",bg:"bg-r",desc:"Plump spring strawberries bursting with sweetness from Elgin Valley farms.",badge:"New"},
+  {id:11,name:"Hass Avocados",price:50,unit:"per bag (6)",cat:"fruit",emo:"🥑",bg:"bg-g",desc:"Creamy Hass avocados at perfect ripeness. Sourced from Tzaneen growers."},
+  {id:12,name:"Roma Tomatoes",price:45,unit:"per kg",cat:"fruit",emo:"🍅",bg:"bg-r",desc:"Firm, flavourful Roma tomatoes ideal for sauces, salads, and bulk cooking."},
+];
+
+const PROMOS = {HARVEST10:10, FRESH20:20, COMMUNITY15:15, SCHOOL25:25};
+
+let cart = JSON.parse(localStorage.getItem('hl-cart')||'[]');
+let wish = JSON.parse(localStorage.getItem('hl-wish')||'[]');
+let activeF = 'all';
+let curPage = 'home';
+let discount = 0;
+let promoOn = false;
+
+// ═══════ NAVIGATION ═══════
+function go(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.querySelectorAll('.nav-links .nav-link').forEach(l=>l.classList.remove('active'));
+  const idx=['home','about','shop','blog'].indexOf(page);
+  if(idx>-1)document.querySelectorAll('.nav-links .nav-link')[idx]?.classList.add('active');
+  if(page==='shop')renderProds();
+  if(page==='cart')renderCart();
+  if(page==='wishlist')renderWish();
+  if(page==='checkout')renderCO();
+  const noFt=['checkout','conf'];
+  document.getElementById('ft').style.display=noFt.includes(page)?'none':'block';
+  window.scrollTo(0,0);
+  curPage=page;
+}
+function toggleMob(){document.getElementById('mob').classList.toggle('open');}
+
+// ═══════ RENDER PRODUCTS ═══════
+function renderProds(list){
+  const grid=document.getElementById('prod-grid');
+  const items=list||filtered();
+  if(!items.length){grid.innerHTML='<div class="no-res">🔍 No produce found. Try a different search or filter.</div>';return;}
+  grid.innerHTML=items.map(p=>{
+    const inW=wish.includes(p.id);
+    const ci=cart.find(c=>c.id===p.id);
+    return `<div class="p-card fade">
+      <div class="p-img ${p.bg}">
+        ${p.badge?`<div class="p-bdg">${p.badge}</div>`:''}
+        <button class="wbtn ${inW?'on':''}" onclick="toggleWish(${p.id})" id="wb-${p.id}" title="${inW?'Remove from wishlist':'Add to wishlist'}">${inW?'❤️':'🤍'}</button>
+        <span style="font-size:4.3rem">${p.emo}</span>
+      </div>
+      <div class="p-info">
+        <div class="p-cat">${p.cat}</div>
+        <div class="p-name">${p.name}</div>
+        <div class="p-unit">${p.unit}</div>
+        <div class="p-desc">${p.desc}</div>
+        <div class="p-foot">
+          <div class="p-price">R${p.price} <span>${p.unit}</span></div>
+          <button class="abtn ${ci?'added':''}" onclick="addCart(${p.id})" id="ab-${p.id}">${ci?`✓ In Cart (${ci.qty})`:'+ Add'}</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function filtered(){
+  const q=(document.getElementById('srch-inp')?.value||'').toLowerCase().trim();
+  return PRODS.filter(p=>{
+    const mf=activeF==='all'||p.cat===activeF;
+    const ms=!q||p.name.toLowerCase().includes(q)||p.cat.includes(q)||p.desc.toLowerCase().includes(q);
+    return mf&&ms;
+  });
+}
+function filterProds(){renderProds();}
+function setFilter(cat,btn){
+  activeF=cat;
+  document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProds();
+}
+
+// ═══════ CART ═══════
+function addCart(id){
+  const prod=PRODS.find(p=>p.id===id);
+  const ex=cart.find(c=>c.id===id);
+  if(ex)ex.qty++;else cart.push({id,qty:1});
+  saveCart();updBadges();
+  if(curPage==='shop'){
+    const btn=document.getElementById('ab-'+id);
+    const it=cart.find(c=>c.id===id);
+    if(btn){btn.textContent=`✓ In Cart (${it.qty})`;btn.classList.add('added');}
+  }
+  toast(`🛒 ${prod.name} added to cart!`);
+}
+function rmCart(id){cart=cart.filter(c=>c.id!==id);saveCart();updBadges();renderCart();if(curPage==='checkout')renderCO();}
+function updQty(id,d){
+  const it=cart.find(c=>c.id===id);if(!it)return;
+  it.qty=Math.max(1,it.qty+d);
+  saveCart();updBadges();renderCart();if(curPage==='checkout')renderCO();
+}
+function cartTotal(){return cart.reduce((s,i)=>{const p=PRODS.find(x=>x.id===i.id);return s+(p?p.price*i.qty:0);},0);}
+function saveCart(){localStorage.setItem('hl-cart',JSON.stringify(cart));}
+
+function renderCart(){
+  const c=document.getElementById('cart-con');if(!c)return;
+  if(!cart.length){c.innerHTML=`<div class="empty-st"><div class="ei">🛒</div><h3>Your basket is empty</h3><p>Add some fresh produce to get started!</p><button class="btn-p" onclick="go('shop')">🌿 Browse Produce</button></div>`;return;}
+  const sub=cartTotal();
+  const dAmt=promoOn?Math.round(sub*discount/100):0;
+  const del=sub>300?0:45;
+  const tot=sub-dAmt+del;
+  c.innerHTML=`<div class="cart-lay">
+    <div>
+      <div class="cart-box">${cart.map(i=>{
+        const p=PRODS.find(x=>x.id===i.id);if(!p)return'';
+        return`<div class="c-item">
+          <div class="c-emo">${p.emo}</div>
+          <div class="c-info"><div class="c-name">${p.name}</div><div class="c-unit">${p.unit}</div></div>
+          <div class="c-qty">
+            <button class="qbtn" onclick="updQty(${p.id},-1)">−</button>
+            <span class="qnum">${i.qty}</span>
+            <button class="qbtn" onclick="updQty(${p.id},1)">+</button>
+          </div>
+          <div class="c-price">R${p.price*i.qty}</div>
+          <button class="rbtn" onclick="rmCart(${p.id})" title="Remove">✕</button>
+        </div>`;
+      }).join('')}</div>
+      <p style="margin-top:10px;font-size:.8rem;color:var(--txl)">🚚 Free delivery on orders over R300</p>
+    </div>
+    <div class="sum-box">
+      <h3>Order Summary</h3>
+      <div class="s-row"><span>Subtotal (${cart.reduce((s,i)=>s+i.qty,0)} items)</span><span>R${sub}</span></div>
+      ${promoOn?`<div class="s-row disc"><span>Promo (${discount}% off)</span><span>−R${dAmt}</span></div>`:''}
+      <div class="s-row"><span>Delivery</span><span>${del===0?'<span style="color:var(--gl)">Free</span>':'R'+del}</span></div>
+      <div class="s-row tot"><span>Total</span><span>R${tot}</span></div>
+      <div class="promo-row">
+        <input type="text" id="promo-in" placeholder="Promo code" value="${promoOn?Object.keys(PROMOS).find(k=>PROMOS[k]===discount)||'':''}">
+        <button onclick="applyPromo()">Apply</button>
+      </div>
+      <div id="pmsg" class="pmsg ${promoOn?'ok':''}">${promoOn?`✓ ${discount}% discount applied!`:''}</div>
+      <p style="font-size:.73rem;color:var(--txl);margin-bottom:4px">Try: HARVEST10 · FRESH20 · COMMUNITY15 · SCHOOL25</p>
+      <button class="co-btn" onclick="go('checkout')">Proceed to Checkout →</button>
+    </div>
+  </div>`;
+}
+
+function applyPromo(){
+  const code=document.getElementById('promo-in')?.value.trim().toUpperCase();
+  const m=document.getElementById('pmsg');
+  if(PROMOS[code]){
+    discount=PROMOS[code];promoOn=true;
+    m.className='pmsg ok';m.textContent=`✓ ${discount}% discount applied!`;
+    toast(`🎉 Promo applied! ${discount}% off`);renderCart();
+  }else{
+    m.className='pmsg err';m.textContent='✕ Invalid promo code. Try HARVEST10.';
+  }
+}
+
+// ═══════ WISHLIST ═══════
+function toggleWish(id){
+  const prod=PRODS.find(p=>p.id===id);
+  if(wish.includes(id)){wish=wish.filter(w=>w!==id);toast(`💔 Removed ${prod.name} from wishlist`);}
+  else{wish.push(id);toast(`❤️ ${prod.name} added to wishlist!`);}
+  localStorage.setItem('hl-wish',JSON.stringify(wish));
+  updBadges();
+  const btn=document.getElementById('wb-'+id);
+  if(btn){btn.textContent=wish.includes(id)?'❤️':'🤍';btn.classList.toggle('on',wish.includes(id));}
+  if(curPage==='wishlist')renderWish();
+}
+function renderWish(){
+  const c=document.getElementById('wish-con');if(!c)return;
+  if(!wish.length){c.innerHTML=`<div class="empty-st"><div class="ei">🤍</div><h3>Your wishlist is empty</h3><p>Tap the heart on any product to save it here.</p><button class="btn-p" onclick="go('shop')">🌿 Browse Produce</button></div>`;return;}
+  const wps=PRODS.filter(p=>wish.includes(p.id));
+  c.innerHTML=`<div class="wish-grid">${wps.map(p=>`
+    <div class="p-card fade">
+      <div class="p-img ${p.bg}">
+        ${p.badge?`<div class="p-bdg">${p.badge}</div>`:''}
+        <button class="wbtn on" onclick="toggleWish(${p.id})">❤️</button>
+        <span style="font-size:4.3rem">${p.emo}</span>
+      </div>
+      <div class="p-info">
+        <div class="p-cat">${p.cat}</div><div class="p-name">${p.name}</div>
+        <div class="p-unit">${p.unit}</div><div class="p-desc">${p.desc}</div>
+        <div class="p-foot">
+          <div class="p-price">R${p.price} <span>${p.unit}</span></div>
+          <button class="abtn" onclick="addCart(${p.id})">+ Add to Cart</button>
+        </div>
+      </div>
+    </div>`).join('')}</div>`;
+}
+
+// ═══════ CHECKOUT ═══════
+function renderCO(){
+  const iEl=document.getElementById('co-items');
+  const tEl=document.getElementById('co-tots');
+  if(!iEl)return;
+  const sub=cartTotal();
+  const dAmt=promoOn?Math.round(sub*discount/100):0;
+  const del=sub>300?0:45;
+  const tot=sub-dAmt+del;
+  iEl.innerHTML=cart.map(i=>{
+    const p=PRODS.find(x=>x.id===i.id);
+    return p?`<div class="oi"><span class="oi-n">${p.emo} ${p.name} ×${i.qty}</span><span class="oi-p">R${p.price*i.qty}</span></div>`:'';
+  }).join('')+'<hr style="border:none;border-top:1px solid var(--cdk);margin:11px 0">';
+  tEl.innerHTML=`
+    <div class="s-row"><span>Subtotal</span><span>R${sub}</span></div>
+    ${promoOn?`<div class="s-row disc"><span>Discount (${discount}%)</span><span style="color:var(--gl)">−R${dAmt}</span></div>`:''}
+    <div class="s-row"><span>Delivery</span><span>${del===0?'Free':'R'+del}</span></div>
+    <div class="s-row tot"><span>Total</span><span>R${tot}</span></div>`;
+}
+
+function selPay(m,el){
+  document.querySelectorAll('.pay-m').forEach(x=>x.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('cf').classList.toggle('vis',m==='card');
+  document.getElementById('eftf').classList.toggle('vis',m==='eft');
+  document.getElementById('walf').style.display=m==='wallet'?'block':'none';
+}
+
+function fmtCard(inp){let v=inp.value.replace(/\D/g,'').substring(0,16);inp.value=v.replace(/(.{4})/g,'$1 ').trim();}
+function fmtExp(inp){let v=inp.value.replace(/\D/g,'').substring(0,4);if(v.length>=3)v=v.substring(0,2)+' / '+v.substring(2);inp.value=v;}
+
+function placeOrder(){
+  if(!cart.length){toast('⚠️ Your basket is empty!');return;}
+  const num='HL-'+Math.floor(10000+Math.random()*90000);
+  document.getElementById('ord-num').textContent='Order #'+num;
+  cart=[];saveCart();updBadges();
+  go('conf');
+}
+
+// ═══════ UI UTILS ═══════
+function updBadges(){
+  const cc=cart.reduce((s,i)=>s+i.qty,0);
+  const wc=wish.length;
+  const cb=document.getElementById('cb');
+  const wb=document.getElementById('wb');
+  cb.textContent=cc;cb.style.display=cc?'flex':'none';
+  wb.textContent=wc;wb.style.display=wc?'flex':'none';
+}
+
+let tTimer;
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(tTimer);tTimer=setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// ═══════ TICKER ═══════
+(function(){
+  const items=['🍠 Sweet Potatoes','🥬 Cabbage','🍊 Oranges','🌿 Spinach','🥕 Carrots','🫐 Beetroot','🥭 Mangoes','🎃 Butternut','🥦 Broccoli','🍓 Strawberries','🥑 Avocados','🍅 Tomatoes'];
+  const html=items.map(i=>`<span class="tick-item">${i} <span style="opacity:.4">•</span></span>`).join('');
+  document.getElementById('ticker').innerHTML=html+html;
+})();
+
+// INIT
+updBadges();
+renderProds();
+</script>
+</body>
+</html>
